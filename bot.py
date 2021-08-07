@@ -77,6 +77,7 @@ def read_from_exchange(exchange):
     return msg
 
 def pull_info_from_server(exchange):
+    order_id = 1
     while True:
         message = read_from_exchange(exchange)
         if not message:
@@ -93,9 +94,10 @@ def pull_info_from_server(exchange):
         #bond = trade_bond(book)
         #bond = evaluate_bond_order(book['BOND'][0],book['BOND'][1], order_id, book['BOND'][0][1],book['BOND'][1][1])
         bond = trade_bond(book, order_id)
+        order_id += 1
         print(bond)
         if not bond:
-            break
+            continue
         else:
             write_to_exchange(exchange, bond)
             #update_book(message)
