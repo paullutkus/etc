@@ -88,13 +88,14 @@ def pull_info_from_server(exchange):
         trade_bond(book)
 
 def update_positions(message):
-    if not message["symbols"]:
-        print("No position data")
-    for security in message['symbols']:
-         print(security)
-         holding = security["position"]
-         name = security["symbol"]
-         positions[name] = holding
+    if message["type"] == "help":
+        if not message["symbols"]:
+            print("No position data")
+        for security in message['symbols']:
+             print(security)
+             holding = security["position"]
+             name = security["symbol"]
+             positions[name] = holding
 
 
 
