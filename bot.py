@@ -56,7 +56,7 @@ def pull_info_from_server(exchange):
             break
         elif message["type"] == "book":
             book[message['symbol']] = (message['buy'], message['sell'])
-
+        trade_bond(book)
 
 # ~~~~~============== MAIN LOOP ==============~~~~~
 
