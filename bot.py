@@ -45,6 +45,12 @@ book = {
     'XLF': [0, 0],
 }
 
+open_orders = {
+    i for i in range(100): None
+}
+
+filled_orders = {}
+
 positions={
     'BOND': 0,
     'GS': 0,
@@ -87,23 +93,16 @@ def pull_info_from_server(exchange):
             print("The round has ended")
             break
         elif message["type"] == "book":
-            #book[message['symbol']] = (message['buy'], message['sell'])
             update_book(message)
-        #elif message["type"] == "trade":
-        #    update_fair_value(message, fmv_book)
-        #bond = trade_bond(book)
-        #bond = evaluate_bond_order(book['BOND'][0],book['BOND'][1], order_id, book['BOND'][0][1],book['BOND'][1][1])
-        bond = trade_bond(book, order_id)
+
+        bond = evaluate_bond_order(book['BOND'][0],book['BOND'][1], order_id, book['BOND'][0][1],book['BOND'][1][1])
         order_id += 1
         print(bond)
         if not bond:
             continue
         else:
             write_to_exchange(exchange, bond)
-            #update_book(message)
-            #book[message['symbol']] = (message['buy'], message['sell'])
-        #elif message["type"] == "trade":
-            #update_fair_value(message, fmv_book)
+
 
 def update_positions(message):
     if message["type"] == "hello":
@@ -120,6 +119,23 @@ def update_book(message):
     book[sym][0] = message["buy"][0]
     book[sym][1] = message["sell"][0]
     print(sym, book[sym])
+
+def update_our_positions(message):
+    if message["type"] == "FILL":
+        #Keep Track of our orders
+        order_id_fill = message["order_id"]
+        open_orders[order_id_fill] = None
+        filled_orders[order_id_fill] = True
+
+        #Keep track of our positions
+        security_order = message["symbol"]
+        size_of_order = message["price"]
+        type_of_message = message["dir"]
+
+        if type_of_message == "SELL":
+            size_of_order *= -1
+        positions[security_order] -= size_of_order
+
 
 
 
