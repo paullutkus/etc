@@ -10,7 +10,7 @@ import sys
 import socket
 import json
 from bond import trade_bond
-from fair_value import calc_fair_value, init_fair_value, update_fair_value
+from fair_value import calc_fair_value, init_fair_value, update_fair_value, place_fmv_order, fmv_book_ready
 from bond_json import evaluate_bond_order, balance_fill
 
 
@@ -132,7 +132,7 @@ def pull_info_from_server(exchange):
                 write_to_exchange(exchange, buy)
                 write_to_exchange(exchange, sell) 
 
-        if(fmv_complete == True)
+        if(fmv_complete == True):
             print("FMV COMPLETED, TRADING ALL EQUITY OFF FMV") 
 
 
