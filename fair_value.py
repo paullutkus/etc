@@ -30,8 +30,8 @@ def place_fmv_order(book, key, value):
 def fmv_book_ready(book):
     for key in book:
         if(book[key][1] < 100):
-            return false
-    return true
+            return False
+    return True
 
 
 
