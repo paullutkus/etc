@@ -32,9 +32,9 @@ def balance_fill(book,fmv_book, fill_order, order_id):
         # if(book[security_order] )
         spread = (book[security_order][1][0] - book[security_order][0][0]) // 2
         if fill_order["dir"] == "BUY":
-            return {"type": "add", "order_id": order_id, "symbol": security_order, "dir": "SELL", "price": fmv_book[security_order][0] + spread, "size": fill_order["size"]}
+            return {"type": "add", "order_id": order_id, "symbol": security_order, "dir": "SELL", "price": fmv_book[security_order][0] + spread - 1, "size": fill_order["size"]}
         else:
-            return {"type": "add", "order_id": order_id, "symbol": security_order, "dir": "BUY", "price": fmv_book[security_order][0] - spread, "size": fill_order["size"]}
+            return {"type": "add", "order_id": order_id, "symbol": security_order, "dir": "BUY", "price": fmv_book[security_order][0] - spread - 1, "size": fill_order["size"]}
 
 def calculate_positions(positions):
     if positions["BOND"] == 0:
