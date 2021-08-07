@@ -90,10 +90,14 @@ def pull_info_from_server(exchange):
         if message["type"] == "close":
             print("The round has ended")
             break
+        elif message["type"] == "fill":
+            trade = balance_fill(message)
+            write_to_exchange(exchange, trade)
+            continue
         elif message["type"] == "book":
             update_book(message)
         order_id += 1
-        bond = evaluate_bond_order(book, order_id)
+        bond = evaluate_bond_order(book, order_id, positions)
         if not bond:
             print("Bond was null")
             continue
