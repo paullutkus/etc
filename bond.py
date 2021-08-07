@@ -1,9 +1,31 @@
 
 
-def trade_bond(book):
-    if book['BOND'][0] > 1000:
-       return "ADD 1 BOND SELL %d 1"(book['BOND'][0])
-    elif book['BOND'][1] < 1000:
-       return "ADD 1 BOND BUY %d 1"(book['BOND'][1]) 
-
+def trade_bond(book, order_id):
+    #print(book['BOND'])
+    if book['BOND'][0] == 0:
+        buy = "ADD " + str(order_id) + "BOND BUY 5 999"
+        order_id += 1
+        return buy
+    elif book['BOND'][1] == 0:
+        sell = "ADD " + str(order_id) + "BOND SELL 5 1001"
+        order_id += 1
+        return sell
+ 
+    elif book['BOND'][1][0] > 1000:
+        sell = "ADD " + str(order_id) + " BOND SELL " + str(book['BOND'][1][0]) + " " + str(book['BOND'][1][1]) 
+        #print(sell)
+        order_id += 1
+        
+        return sell
+    elif book['BOND'][0][0] < 1000:
+        #print("hi ", book['BOND'])
+        buy = "ADD " + str(order_id) + " BOND BUY " + str(book['BOND'][0][0]) + " " + str(book['BOND'][0][1])  
+        #print("bond buy:", book['BOND'][0]) 
+        #buy = " " 
+        #print(buy)
+        order_id += 1
+        
+        return buy 
+    else:
+        return None
 
