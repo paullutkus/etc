@@ -11,7 +11,7 @@ import socket
 import json
 from bond import trade_bond
 from fair_value import calc_fair_value, init_fair_value, update_fair_value
-from bond_json import evaluate_bond_order
+from bond_json import evaluate_bond_order, balance_fill
 
 
 # ~~~~~============== CONFIGURATION  ==============~~~~~
@@ -19,7 +19,7 @@ from bond_json import evaluate_bond_order
 team_name = "rector"
 # This variable dictates whether or not the bot is connecting to the prod
 # or test exchange. Be careful with this switch!
-test_mode = True
+test_mode = False
 
 # This setting changes which test exchange is connected to.
 # 0 is prod-like
@@ -78,7 +78,12 @@ def write_to_exchange(exchange, obj):
 def read_from_exchange(exchange):
     msg = json.loads(exchange.readline())
     update_positions(msg)
+    update_our_positions(msg)
     return msg
+
+def buy_num(sym, num):
+    return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": 1}
+  
 
 def pull_info_from_server(exchange):
     order_id = 1
@@ -87,24 +92,28 @@ def pull_info_from_server(exchange):
         if not message:
             print("Returned null")
             break
-        else:
+        elif message["type"] == "fill" or message["type"] == "reject" or message["type"] == "ack":
             print(message)
         if message["type"] == "close":
             print("The round has ended")
             break
+        elif message["type"] == "fill":
+            trade = balance_fill(message)
+            write_to_exchange(exchange, trade)
+            continue
         elif message["type"] == "book":
             update_book(message)
         order_id += 1
-        if order_id <= 5:
 
-            bond = evaluate_bond_order(book, order_id)
-            #update_fair_value(bond, fmv_book)
-            #print(bond)
-            
-            if not bond:
-                continue
-            else:
-                write_to_exchange(exchange, bond)
+        bond = evaluate_bond_order(book, order_id, positions)
+        #update_fair_value(bond, fmv_book)
+        #print(bond)
+        bond_test =  
+        if not bond:
+            print("Bond was null")
+            continue
+        elif order_id % 3 == 0:
+            write_to_exchange(exchange, bond)
 
 def update_positions(message):
     if message["type"] == "hello":
