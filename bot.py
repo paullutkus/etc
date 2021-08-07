@@ -11,6 +11,7 @@ import socket
 import json
 from bond import trade_bond
 from fair_value import calc_fair_value, init_fair_value, update_fair_value
+from bot_json import evaluate_bond_order
 
 
 # ~~~~~============== CONFIGURATION  ==============~~~~~
@@ -29,6 +30,8 @@ prod_exchange_hostname = "production"
 
 port = 25000 + (test_exchange_index if test_mode else 0)
 exchange_hostname = "test-exch-" + team_name if test_mode else prod_exchange_hostname
+
+order_id = 0
 
 book = {
     'BOND': 0,
@@ -86,8 +89,12 @@ def pull_info_from_server(exchange):
             book[message['symbol']] = (message['buy'], message['sell'])
         elif message["type"] == "trade":
             update_fair_value(message, fmv_book)
-
-        trade_bond(book)
+        #bond = trade_bond(book)
+        bond = evaluate_bond_order(book['BOND'][0],book['BOND'][1], order_id, book['BOND'][0][1],book['BOND'][1][1])
+        if not bond:
+            break
+        else:
+            write_to_exchange(exchange, bond)
 
 def update_positions(message):
     if message["type"] == "help":
@@ -117,7 +124,10 @@ def main():
     # exponential explosion in pending messages. Please, don't do that!
     print("The exchange replied:", hello_from_exchange, file=sys.stderr)
 
+
     pull_info_from_server(exchange)
+
+
         
 if __name__ == "__main__":
     main()
