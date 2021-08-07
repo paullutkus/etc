@@ -128,9 +128,11 @@ def pull_info_from_server(exchange):
             fmv_complete = True
 
             for key, value in fmv_book.items():
-                buy, sell = place_fmv_order(book, key, value)
+                buy, sell = place_fmv_order(book, key, value[0])
                 write_to_exchange(exchange, buy)
+                order_id += 1
                 write_to_exchange(exchange, sell) 
+                order_id += 1
 
         if(fmv_complete == True)
             print("FMV COMPLETED, TRADING ALL EQUITY OFF FMV") 
