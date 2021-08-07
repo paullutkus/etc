@@ -86,7 +86,7 @@ def update_positions(message):
     if not message["symbols"]:
         print("No position data")
     for security in message['symbols']:
-         print("security", security , "type", type(security))
+         print(security)
          holding = security["position"]
          name = security["symbol"]
          positions[name] = holding
@@ -102,6 +102,7 @@ def main():
     exchange = connect()
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     hello_from_exchange = read_from_exchange(exchange)
+    print("positions", positions)
     # A common mistake people make is to call write_to_exchange() > 1
     # time for every read_from_exchange() response.
     # Since many write messages generate marketdata, this will cause an
