@@ -94,10 +94,11 @@ def pull_info_from_server(exchange):
             update_book(message)
         order_id += 1
         bond = evaluate_bond_order(book, order_id)
-        print(bond)
         if not bond:
+            print("Bond was null")
             continue
-        else:
+        elif order_id %3 == 0:
+            print("Ordered")
             write_to_exchange(exchange, bond)
 
 
