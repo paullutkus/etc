@@ -81,14 +81,6 @@ def read_from_exchange(exchange):
 
     update_our_positions(msg)
 
-    buy = {"type": "add", "order_id": 1, "symbol": "BOND", "dir": "BUY", "price": 999, "size": 100}
-
-    write_to_exchange(exchange, buy)
-
-    sell = {"type": "add", "order_id": 2, "symbol": "BOND", "dir": "BUY", "price": 1001, "size": 100}
-
-    write_to_exchange(exchange, sell)
-
 
     return msg
 
@@ -100,7 +92,18 @@ def sell_num(sym, order_id, price, num):
 
 
 def pull_info_from_server(exchange):
+    
+
+    buy = {"type": "add", "order_id": 1, "symbol": "BOND", "dir": "BUY", "price": 999, "size": 100}
+
+    write_to_exchange(exchange, buy)
+
+    sell = {"type": "add", "order_id": 2, "symbol": "BOND", "dir": "BUY", "price": 1001, "size": 100}
+
+    write_to_exchange(exchange, sell)
+
     order_id = 3
+    
     while True:
         message = read_from_exchange(exchange)
         if not message:
