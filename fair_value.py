@@ -15,7 +15,7 @@ def init_fair_value(book):
 
 
 def calc_fair_value(average, size, new_price, trade_size):
-    new_average = average + ((new_price - average) / size + 1)
+    new_average = average + (new_price - average) / (size + 1)
     if trade_size == 1:
         return new_average
     else:
