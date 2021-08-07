@@ -79,13 +79,13 @@ def read_from_exchange(exchange):
     msg = json.loads(exchange.readline())
     update_positions(msg)
 
-    update_our_positions(message)
+    update_our_positions(msg)
 
-    buy = {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": 100}
+    buy = {"type": "add", "order_id": 1, "symbol": "BOND", "dir": "BUY", "price": 999, "size": 100}
 
     write_to_exchange(exchange, buy)
 
-    sell = {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 1001, "size": 100}
+    sell = {"type": "add", "order_id": 2, "symbol": "BOND", "dir": "BUY", "price": 1001, "size": 100}
 
     write_to_exchange(exchange, sell)
 
@@ -100,7 +100,7 @@ def sell_num(sym, order_id, price, num):
 
 
 def pull_info_from_server(exchange):
-    order_id = 1
+    order_id = 3
     while True:
         message = read_from_exchange(exchange)
         if not message:
@@ -112,7 +112,8 @@ def pull_info_from_server(exchange):
             print("The round has ended")
             break
         elif message["type"] == "fill":
-            trade = balance_fill(message)
+            trade = balance_fill(message, order_id)
+            order_id += 1
             write_to_exchange(exchange, trade)
             
         elif message["type"] == "book":
