@@ -28,18 +28,28 @@ prod_exchange_hostname = "production"
 port = 25000 + (test_exchange_index if test_mode else 0)
 exchange_hostname = "test-exch-" + team_name if test_mode else prod_exchange_hostname
 
-book = {}
+book = {
+    'BOND': 0,
+     'GS': 0,
+     'MS': 0,
+     'VALBZ': 0,
+     'VALE': 0,
+     'GS': 0,
+     'MS': 0,
+     'WFC': 0,
+     'XLF': 0,
+}
 
 positions={
     'BOND': 0,
     'GS': 0,
     'MS': 0,
     'VALBZ': 0,
-   'VALE': 0,
-   'GS': 0,
-   'MS': 0,
-   'WFC': 0,
-   'XLF': 0,
+    'VALE': 0,
+    'GS': 0,
+    'MS': 0,
+    'WFC': 0,
+    'XLF': 0,
 }
 
 # ~~~~~============== NETWORKING CODE ==============~~~~~
@@ -76,6 +86,7 @@ def update_positions(message):
     if not message['symbols']:
         print("No position data")
     for security in message['symbols']:
+         print(type(security))
          holding = security['position']
          name = security['symbol']
          positions[name] = holding
