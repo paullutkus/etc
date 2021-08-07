@@ -12,7 +12,7 @@ import json
 
 # ~~~~~============== CONFIGURATION  ==============~~~~~
 # replace REPLACEME with your team name!
-team_name = "REPLACEME"
+team_name = "rector"
 # This variable dictates whether or not the bot is connecting to the prod
 # or test exchange. Be careful with this switch!
 test_mode = True
@@ -55,12 +55,19 @@ def main():
     # Since many write messages generate marketdata, this will cause an
     # exponential explosion in pending messages. Please, don't do that!
     print("The exchange replied:", hello_from_exchange, file=sys.stderr)
+
+    book = {}
+
     while True:
         message = read_from_exchange(exchange)
+        if not message:
+            print("Returned null")
+            break
         if message["type"] == "close":
             print("The round has ended")
             break
-
-
+        elif message["type"] == "book":
+            book[message['symbol']] = (message['buy'], message['sell'])
+        
 if __name__ == "__main__":
     main()
