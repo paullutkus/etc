@@ -86,7 +86,7 @@ def update_positions(message):
     if not message["symbols"]:
         print("No position data")
     for security in message['symbols']:
-         print("security" + security + "type" + type(security))
+         print("security", security , "type", type(security))
          holding = security["position"]
          name = security["symbol"]
          positions[name] = holding
