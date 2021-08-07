@@ -10,6 +10,8 @@ import sys
 import socket
 import json
 from bond import trade_bond
+from fair_value import calc_fair_value, init_fair_value, update_fair_value
+
 
 # ~~~~~============== CONFIGURATION  ==============~~~~~
 # replace REPLACEME with your team name!
