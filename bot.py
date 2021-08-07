@@ -100,6 +100,7 @@ def pull_info_from_server(exchange):
     write_to_exchange(exchange, sell)
 
     order_id = 3
+    fmv_complete = False
 
     while True:
         message = read_from_exchange(exchange)
@@ -112,7 +113,7 @@ def pull_info_from_server(exchange):
             print("The round has ended")
             break
         elif message["type"] == "fill":
-            trade = balance_fill(message, order_id)
+            trade = balance_fill(fmv_book, message, order_id)
             order_id += 1
             write_to_exchange(exchange, trade)
             
@@ -122,6 +123,17 @@ def pull_info_from_server(exchange):
             update_fair_value(message, fmv_book)
 
         print("FMV BOOK: ", fmv_book)
+
+        if(fmv_book_ready(fmv_book) and not fmv_complete):
+            fmv_complete = True
+
+            for key, value in fmv_book.items():
+                buy, sell = place_fmv_order(book, key, value)
+                write_to_exchange(exchange, buy)
+                write_to_exchange(exchange, sell) 
+
+        if(fmv_complete == True)
+            print("FMV COMPLETED, TRADING ALL EQUITY OFF FMV") 
 
 
         # order_id += 1

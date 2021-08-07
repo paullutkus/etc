@@ -14,8 +14,26 @@ def init_fair_value(book):
         fmv_book[key] = [0,0]
     return fmv_book
 
-# def active_fair_values(fmv_book):
-#     print(  )
+def place_fmv_order(book, key, value):
+
+    if(key == "VALBZ" or key == "VALE"):
+        buy = {"type": "add", "order_id": 1, "symbol": key, "dir": "BUY", "price": value - 1, "size": 10}
+
+        sell = {"type": "add", "order_id": 2, "symbol": key, "dir": "BUY", "price": value + 1, "size": 10}
+    else:
+        buy = {"type": "add", "order_id": 1, "symbol": key, "dir": "BUY", "price": value - 1, "size": 100}
+
+        sell = {"type": "add", "order_id": 2, "symbol": key, "dir": "BUY", "price": value + 1, "size": 100}
+
+    return buy, sell
+
+def fmv_book_ready(book):
+    for key in book:
+        if(book[key][1] < 100):
+            return false
+    return true
+
+
 
 def calc_fair_value(average, size, new_price, trade_size):
     #new_average = average + (new_price - average) / (size + 1)
