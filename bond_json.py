@@ -36,6 +36,7 @@ def balance_fill(book,fmv_book, fill_order, order_id):
         else:
             return {"type": "add", "order_id": order_id, "symbol": security_order, "dir": "BUY", "price": fmv_price - 1, "size": fill_order["size"]}
 
+
 def calculate_positions(positions):
     if positions["BOND"] == 0:
         return 100, 100
