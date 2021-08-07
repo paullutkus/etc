@@ -27,6 +27,8 @@ prod_exchange_hostname = "production"
 port = 25000 + (test_exchange_index if test_mode else 0)
 exchange_hostname = "test-exch-" + team_name if test_mode else prod_exchange_hostname
 
+book = {}
+
 # ~~~~~============== NETWORKING CODE ==============~~~~~
 def connect():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -42,6 +44,18 @@ def write_to_exchange(exchange, obj):
 def read_from_exchange(exchange):
     return json.loads(exchange.readline())
 
+def pull_info_from_server(exchange):
+    while True:
+        message = read_from_exchange(exchange)
+        if not message:
+            print("Returned null")
+            break
+        if message["type"] == "close":
+            print("The round has ended")
+            break
+        elif message["type"] == "book":
+            book[message['symbol']] = (message['buy'], message['sell'])
+
 
 # ~~~~~============== MAIN LOOP ==============~~~~~
 
@@ -56,18 +70,7 @@ def main():
     # exponential explosion in pending messages. Please, don't do that!
     print("The exchange replied:", hello_from_exchange, file=sys.stderr)
 
-    book = {}
-
-    while True:
-        message = read_from_exchange(exchange)
-        if not message:
-            print("Returned null")
-            break
-        if message["type"] == "close":
-            print("The round has ended")
-            break
-        elif message["type"] == "book":
-            book[message['symbol']] = (message['buy'], message['sell'])
+    pull_info_from_server(exchange)
         
 if __name__ == "__main__":
     main()
