@@ -9,6 +9,7 @@ from __future__ import print_function
 import sys
 import socket
 import json
+from bond import trade_bond
 
 # ~~~~~============== CONFIGURATION  ==============~~~~~
 # replace REPLACEME with your team name!
