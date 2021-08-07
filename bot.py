@@ -52,6 +52,8 @@ positions={
     'XLF': 0,
 }
 
+fmv_book = init_fair_value(book)
+
 # ~~~~~============== NETWORKING CODE ==============~~~~~
 def connect():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -80,6 +82,9 @@ def pull_info_from_server(exchange):
             break
         elif message["type"] == "book":
             book[message['symbol']] = (message['buy'], message['sell'])
+        elif message["type"] == "trade":
+            update_fair_value(message, fmv_book)
+
         trade_bond(book)
 
 def update_positions(message):
