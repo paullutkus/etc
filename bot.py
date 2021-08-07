@@ -81,9 +81,12 @@ def read_from_exchange(exchange):
     update_our_positions(msg)
     return msg
 
-def buy_num(sym, num):
-    return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": 1}
-  
+def buy_num(sym, order_id, price, num):
+    return {"type": "add", "order_id": order_id, "symbol": sym, "dir": "BUY", "price": price, "size": num}
+
+def sell_num(sym, order_id, price, num):
+    return {"type": "add", "order_id": order_id, "symbol": sym, "dir": "BUY", "price": price, "size": num}
+
 
 def pull_info_from_server(exchange):
     order_id = 1
