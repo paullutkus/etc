@@ -78,7 +78,7 @@ def write_to_exchange(exchange, obj):
 def read_from_exchange(exchange):
     msg = json.loads(exchange.readline())
     update_positions(msg)
-<<<<<<< HEAD
+
     update_our_positions(message)
 
     buy = {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": 100}
@@ -89,9 +89,7 @@ def read_from_exchange(exchange):
 
     write_to_exchange(exchange, sell)
 
-=======
-    update_our_positions(msg)
->>>>>>> 40891d02604f18c83e6f0441f38ecf8387d132f2
+
     return msg
 
 def buy_num(sym, num):
