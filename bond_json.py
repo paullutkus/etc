@@ -21,14 +21,13 @@ def evaluate_bond_order(book, order_id, positions):
     else:
         return None
 
-def balance_fill(filL_order, order_id):
-   if message["type"] == "FILL":
-    security_order = message["symbol"]
+def balance_fill(fill_order, order_id):
+    security_order = fill_order["symbol"]
     if security_order == "BOND":
-       if message["dir"] == "BUY":
-            return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "SELL", "price": 1001, "size": message["size"]}
+       if fill_order["dir"] == "BUY":
+            return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "SELL", "price": 1001, "size": fill_order["size"]}
        else:
-            return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": message["size"]}
+            return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": fill_order["size"]}
 
 def calculate_positions(positions):
     if positions["BOND"] == 0:

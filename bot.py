@@ -118,6 +118,8 @@ def pull_info_from_server(exchange):
             
         elif message["type"] == "book":
             update_book(message)
+        elif message["type"] ==  "trade":
+            update_fair_value(message, fmv_book)
 
         # order_id += 1
 
