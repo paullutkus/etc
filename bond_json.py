@@ -29,7 +29,7 @@ def balance_fill(book,fmv_book, fill_order, order_id):
        else:
             return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": fill_order["size"]}
     else:
-        fmv_price = fmv_book[security_order][key].ewm(span=100, adjust=False).mean()
+        fmv_price = fmv_book[security_order][1]
         # spread = (book[security_order][1][0] - book[security_order][0][0]) // 2
         if fill_order["dir"] == "BUY":
             return {"type": "add", "order_id": order_id, "symbol": security_order, "dir": "SELL", "price": fmv_price + 1, "size": fill_order["size"]}

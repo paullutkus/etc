@@ -10,7 +10,7 @@ import sys
 import socket
 import json
 from bond import trade_bond
-from fair_value import calc_fair_value, init_fair_value, update_fair_value, place_fmv_order, fmv_book_ready
+from fair_value import calc_ema, init_fair_value, update_fair_value, place_fmv_order, fmv_book_ready
 from bond_json import evaluate_bond_order, balance_fill
 import pandas as pd
 
@@ -123,15 +123,14 @@ def pull_info_from_server(exchange):
             update_book(message)
         elif message["type"] ==  "trade":
             update_fair_value(message, fmv_book)
-
         print("FMV BOOK: ", fmv_book)
 
         if(fmv_book_ready(fmv_book) and not fmv_complete):
             fmv_complete = True
 
             for key, value in fmv_book.items():
-                ema = value[key].ewm(span=100, adjust=False).mean()
-                buy, sell = place_fmv_order(book, key, ema)
+                value[1] = np.mean(value[0])
+                buy, sell = place_fmv_order(book, key, value[1])
                 write_to_exchange(exchange, buy)
                 order_id += 1
                 write_to_exchange(exchange, sell) 
