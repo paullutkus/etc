@@ -87,18 +87,22 @@ def pull_info_from_server(exchange):
         if not message:
             print("Returned null")
             break
+        else:
+            print(message)
         if message["type"] == "close":
             print("The round has ended")
             break
         elif message["type"] == "book":
             update_book(message)
         order_id += 1
-        bond = evaluate_bond_order(book, order_id)
-        print(bond)
-        if not bond:
-            continue
-        else:
-            write_to_exchange(exchange, bond)
+        if order_id <= 5:
+
+            bond = evaluate_bond_order(book, order_id)
+            #print(bond)
+            if not bond:
+                continue
+            else:
+                write_to_exchange(exchange, bond)
 
 
 def update_positions(message):
