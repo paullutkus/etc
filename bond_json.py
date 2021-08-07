@@ -21,7 +21,7 @@ def evaluate_bond_order(book, order_id, positions):
     else:
         return None
 
-def balance_fill(fmv_book, fill_order, order_id):
+def balance_fill(book,fmv_book, fill_order, order_id):
     security_order = fill_order["symbol"]
     if security_order == "BOND":
        if fill_order["dir"] == "BUY":
@@ -29,10 +29,11 @@ def balance_fill(fmv_book, fill_order, order_id):
        else:
             return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": fill_order["size"]}
     else:
+
         if fill_order["dir"] == "BUY":
-            return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "SELL", "price": fmv_book[security_order][0] + 1, "size": fill_order["size"]}
+            return {"type": "add", "order_id": order_id, "symbol": security_order, "dir": "SELL", "price": fmv_book[security_order][0] + 1, "size": fill_order["size"]}
         else:
-            return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": fmv_book[security_order][0] - 1, "size": fill_order["size"]}
+            return {"type": "add", "order_id": order_id, "symbol": security_order, "dir": "BUY", "price": fmv_book[security_order][0] - 1, "size": fill_order["size"]}
 
 def calculate_positions(positions):
     if positions["BOND"] == 0:

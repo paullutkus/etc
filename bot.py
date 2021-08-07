@@ -113,7 +113,7 @@ def pull_info_from_server(exchange):
             print("The round has ended")
             break
         elif message["type"] == "fill":
-            trade = balance_fill(fmv_book, message, order_id)
+            trade = balance_fill(book, fmv_book, message, order_id)
             order_id += 1
             write_to_exchange(exchange, trade)
             
