@@ -10,7 +10,7 @@ import sys
 import socket
 import json
 from bond import trade_bond
-from fair_value import calc_fair_value, init_fair_value, update_fair_value
+from fair_value import calc_fair_value, init_fair_value, update_fair_value, place_fmv_order, fmv_book_ready
 from bond_json import evaluate_bond_order, balance_fill
 
 
@@ -100,6 +100,7 @@ def pull_info_from_server(exchange):
     write_to_exchange(exchange, sell)
 
     order_id = 3
+    fmv_complete = False
 
     while True:
         message = read_from_exchange(exchange)
@@ -112,7 +113,7 @@ def pull_info_from_server(exchange):
             print("The round has ended")
             break
         elif message["type"] == "fill":
-            trade = balance_fill(message, order_id)
+            trade = balance_fill(fmv_book, message, order_id)
             order_id += 1
             write_to_exchange(exchange, trade)
             
@@ -122,6 +123,19 @@ def pull_info_from_server(exchange):
             update_fair_value(message, fmv_book)
 
         print("FMV BOOK: ", fmv_book)
+
+        if(fmv_book_ready(fmv_book) and not fmv_complete):
+            fmv_complete = True
+
+            for key, value in fmv_book.items():
+                buy, sell = place_fmv_order(book, key, value[0])
+                write_to_exchange(exchange, buy)
+                order_id += 1
+                write_to_exchange(exchange, sell) 
+                order_id += 1
+
+        if(fmv_complete == True):
+            print("FMV COMPLETED, TRADING ALL EQUITY OFF FMV") 
 
 
         # order_id += 1
