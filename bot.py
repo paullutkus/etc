@@ -11,7 +11,7 @@ import socket
 import json
 from bond import trade_bond
 from fair_value import calc_fair_value, init_fair_value, update_fair_value
-#from bot_json import evaluate_bond_order
+from bond_json import evaluate_bond_order
 
 
 # ~~~~~============== CONFIGURATION  ==============~~~~~
@@ -45,9 +45,7 @@ book = {
     'XLF': [0, 0],
 }
 
-open_orders = {
-    i for i in range(100): None
-}
+
 
 filled_orders = {}
 
@@ -94,9 +92,8 @@ def pull_info_from_server(exchange):
             break
         elif message["type"] == "book":
             update_book(message)
-
-        bond = evaluate_bond_order(book['BOND'][0],book['BOND'][1], order_id, book['BOND'][0][1],book['BOND'][1][1])
         order_id += 1
+        bond = evaluate_bond_order(book, order_id)
         print(bond)
         if not bond:
             continue
@@ -124,7 +121,7 @@ def update_our_positions(message):
     if message["type"] == "FILL":
         #Keep Track of our orders
         order_id_fill = message["order_id"]
-        open_orders[order_id_fill] = None
+        #open_orders[order_id_fill] = None
         filled_orders[order_id_fill] = True
 
         #Keep track of our positions
