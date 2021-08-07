@@ -10,9 +10,11 @@ def update_fair_value(trade, fmv_book):
 def init_fair_value(book):
     fmv_book = {}
     for key in book:
-        fmv_book[key] = (0,0)
+        fmv_book[key] = [0,0]
     return fmv_book
 
+# def active_fair_values(fmv_book):
+#     print(  )
 
 def calc_fair_value(average, size, new_price, trade_size):
     new_average = average + (new_price - average) / (size + 1)

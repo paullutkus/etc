@@ -84,12 +84,9 @@ def read_from_exchange(exchange):
 
     return msg
 
-def buy_num(sym, order_id, price, num):
-    return {"type": "add", "order_id": order_id, "symbol": sym, "dir": "BUY", "price": price, "size": num}
-
-def sell_num(sym, order_id, price, num):
-    return {"type": "add", "order_id": order_id, "symbol": sym, "dir": "BUY", "price": price, "size": num}
-
+def buy_num(sym, num):
+    return {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": 1}
+  
 
 def pull_info_from_server(exchange):
     
@@ -123,6 +120,9 @@ def pull_info_from_server(exchange):
             update_book(message)
         elif message["type"] ==  "trade":
             update_fair_value(message, fmv_book)
+
+        print("FMV BOOK: ", fmv_book)
+
 
         # order_id += 1
 
