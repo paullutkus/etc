@@ -111,20 +111,21 @@ def pull_info_from_server(exchange):
         elif message["type"] == "fill":
             trade = balance_fill(message)
             write_to_exchange(exchange, trade)
-            continue
+            
         elif message["type"] == "book":
             update_book(message)
-        order_id += 1
 
-        bond = evaluate_bond_order(book, order_id, positions)
-        #update_fair_value(bond, fmv_book)
-        #print(bond)
-        bond_test =  
-        if not bond:
-            print("Bond was null")
-            continue
-        elif order_id % 3 == 0:
-            write_to_exchange(exchange, bond)
+        # order_id += 1
+
+        # bond = evaluate_bond_order(book, order_id, positions)
+        # #update_fair_value(bond, fmv_book)
+        # #print(bond)
+        # bond_test =  
+        # if not bond:
+        #     print("Bond was null")
+        #     continue
+        # elif order_id % 3 == 0:
+        #     write_to_exchange(exchange, bond)
 
 def update_positions(message):
     if message["type"] == "hello":
