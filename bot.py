@@ -100,7 +100,7 @@ def pull_info_from_server(exchange):
     write_to_exchange(exchange, sell)
 
     order_id = 3
-    
+
     while True:
         message = read_from_exchange(exchange)
         if not message:
@@ -143,8 +143,8 @@ def update_positions(message):
 
 def update_book(message):
     sym = message["symbol"]
-    book[sym][0] = message["buy"][0]
-    book[sym][1] = message["sell"][0]
+    book[sym][0] = message["buy"]
+    book[sym][1] = message["sell"]
     print(sym, book[sym])
 
 def update_our_positions(message):

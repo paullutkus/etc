@@ -21,7 +21,7 @@ def evaluate_bond_order(book, order_id, positions):
     else:
         return None
 
-def balance_fill(filL_order):
+def balance_fill(filL_order, order_id):
    if message["type"] == "FILL":
     security_order = message["symbol"]
     if security_order == "BOND":
