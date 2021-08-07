@@ -30,6 +30,18 @@ exchange_hostname = "test-exch-" + team_name if test_mode else prod_exchange_hos
 
 book = {}
 
+positions={
+    'BOND': 0,
+    'GS': 0,
+    'MS': 0,
+    'VALBZ': 0,
+   'VALE': 0,
+   'GS': 0,
+   'MS': 0,
+   'WFC': 0,
+   'XLF': 0,
+}
+
 # ~~~~~============== NETWORKING CODE ==============~~~~~
 def connect():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -43,7 +55,9 @@ def write_to_exchange(exchange, obj):
 
 
 def read_from_exchange(exchange):
-    return json.loads(exchange.readline())
+    msg = json.loads(exchange.readline())
+    update_positions(msg)
+    return msg
 
 def pull_info_from_server(exchange):
     while True:
@@ -57,6 +71,18 @@ def pull_info_from_server(exchange):
         elif message["type"] == "book":
             book[message['symbol']] = (message['buy'], message['sell'])
         trade_bond(book)
+
+def update_positions(message):
+    if not message['symbols']:
+        print("No position data")
+    for security in message['symbols']:
+         holding = security['position']
+         name = security['symbol']
+         positions[name] = holding
+
+
+
+
 
 # ~~~~~============== MAIN LOOP ==============~~~~~
 
