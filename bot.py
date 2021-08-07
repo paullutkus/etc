@@ -78,6 +78,16 @@ def write_to_exchange(exchange, obj):
 def read_from_exchange(exchange):
     msg = json.loads(exchange.readline())
     update_positions(msg)
+    update_our_positions(message)
+
+    buy = {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": 100}
+
+    write_to_exchange(exchange, buy)
+
+    sell = {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 1001, "size": 100}
+
+    write_to_exchange(exchange, sell)
+
     return msg
 
 def pull_info_from_server(exchange):
