@@ -61,7 +61,7 @@ positions={
     'XLF': 0,
 }
 
-#fmv_book = init_fair_value(book)
+fmv_book = init_fair_value(book)
 
 # ~~~~~============== NETWORKING CODE ==============~~~~~
 def connect():
@@ -98,12 +98,13 @@ def pull_info_from_server(exchange):
         if order_id <= 5:
 
             bond = evaluate_bond_order(book, order_id)
+            #update_fair_value(bond, fmv_book)
             #print(bond)
+            
             if not bond:
                 continue
             else:
                 write_to_exchange(exchange, bond)
-
 
 def update_positions(message):
     if message["type"] == "hello":
