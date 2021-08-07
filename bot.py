@@ -78,7 +78,18 @@ def write_to_exchange(exchange, obj):
 def read_from_exchange(exchange):
     msg = json.loads(exchange.readline())
     update_positions(msg)
-    update_our_positions(msg)
+
+    update_our_positions(message)
+
+    buy = {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 999, "size": 100}
+
+    write_to_exchange(exchange, buy)
+
+    sell = {"type": "add", "order_id": order_id, "symbol": "BOND", "dir": "BUY", "price": 1001, "size": 100}
+
+    write_to_exchange(exchange, sell)
+
+
     return msg
 
 def buy_num(sym, order_id, price, num):
@@ -103,20 +114,21 @@ def pull_info_from_server(exchange):
         elif message["type"] == "fill":
             trade = balance_fill(message)
             write_to_exchange(exchange, trade)
-            continue
+            
         elif message["type"] == "book":
             update_book(message)
-        order_id += 1
 
-        bond = evaluate_bond_order(book, order_id, positions)
-        #update_fair_value(bond, fmv_book)
-        #print(bond)
-        bond_test =  
-        if not bond:
-            print("Bond was null")
-            continue
-        elif order_id % 3 == 0:
-            write_to_exchange(exchange, bond)
+        # order_id += 1
+
+        # bond = evaluate_bond_order(book, order_id, positions)
+        # #update_fair_value(bond, fmv_book)
+        # #print(bond)
+        # bond_test =  
+        # if not bond:
+        #     print("Bond was null")
+        #     continue
+        # elif order_id % 3 == 0:
+        #     write_to_exchange(exchange, bond)
 
 def update_positions(message):
     if message["type"] == "hello":
